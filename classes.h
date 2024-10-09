@@ -1,9 +1,13 @@
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <iostream>
 #include <wx/string.h>
+#include <wx/wx.h>
+
+
 
 using namespace std;
 
@@ -43,16 +47,19 @@ private:
 public:
 	Account& currentAccount;
 
-	bool accountExists(const std::string& accountNumber) const;
-
 	char getDriveLetter() const { return driveLetter; }
 
 	Bank(Account& admin) : head(nullptr), currentAccount(admin), accNumberCounter(0) {}
+
+	string getSignificantDigits(const string& accountNumber);
 
 	bool isCardRegistered();
 	
 	void retrieveAllAccounts();
 	void saveAllAccounts();
+
+	bool accountDuplicationChecker(string name, string contactNum);
+	bool accountExists(const string& hashedaccountNum) const;
 
 	void add(Account account);
 
@@ -60,5 +67,8 @@ public:
 		// Generate the account number in 5-digit format with leading zeros
 		return wxString::Format("%05d", accNumberCounter++).ToStdString();
 	}
+
+	string hashPinCode(const string& pincode, const string& accountNumber);
+	
 };
 

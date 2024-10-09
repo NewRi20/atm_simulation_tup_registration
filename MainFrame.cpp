@@ -19,6 +19,7 @@ MainFrame::MainFrame(const wxString& title)
     /*wxMessageBox(wxString::Format("Admin Balance: %f", adminAccount.balance), "Balance Inquiry", wxOK | wxICON_INFORMATION);
     wxMessageBox(wxString::Format("Current Account Balance: %f", bank.currentAccount.balance), "Balance Inquiry", wxOK | wxICON_INFORMATION);*/
     bank.retrieveAllAccounts();
+    isLoggedIn = false;
     CreateControls();
     SetupSizers();
     BindEventHandlers();
@@ -48,10 +49,9 @@ void MainFrame::CreateControls()
     registrationText = new wxStaticText(panel, wxID_ANY, "Register for an Account");
     registrationText->SetFont(headlineFont);
 
-    
     accountNameInputField = new wxTextCtrl(panel, wxID_ANY, "Name: ", wxDefaultPosition, wxDefaultSize); 
     birthdayInputField = new wxTextCtrl(panel, wxID_ANY, "Birthday (MM-DD-YYYY): ", wxDefaultPosition, wxDefaultSize);
-    contactNumberInputField = new wxTextCtrl(panel, wxID_ANY, "Contact Number(+63 000 - 000 - 0000) : ", wxDefaultPosition, wxDefaultSize);
+    contactNumberInputField = new wxTextCtrl(panel, wxID_ANY, "Contact Number(00000000000) : ", wxDefaultPosition, wxDefaultSize);
     pinCodeInputField = new wxTextCtrl(panel, wxID_ANY, "PIN Code (000000): ", wxDefaultPosition, wxDefaultSize); 
 
     registerButton = new wxButton(panel, wxID_ANY, "Register");
@@ -124,6 +124,7 @@ void MainFrame::BindEventHandlers()
     this->Bind(wxEVT_TIMER, &MainFrame::OnTimer, this);
     balanceInquiryButton->Bind(wxEVT_BUTTON, &MainFrame::OnBalanceInquiryButtonClicked, this);
     registerButton->Bind(wxEVT_BUTTON, &MainFrame::OnRegisterButtonClicked, this);
+    enterPincodeButton->Bind(wxEVT_BUTTON, &MainFrame::OnEnterPincodeButton, this);
 
     // Bind focus and unfocus events for the text controls
     accountNameInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
@@ -138,11 +139,18 @@ void MainFrame::BindEventHandlers()
     pinCodeInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
     pinCodeInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
 
+    //Bind Window Close Event and Save to .csvfile
     this->Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnWindowClose, this);
+
 }
 
 void MainFrame::OnTimer(wxTimerEvent& evt)
 {
+    if (isLoggedIn) {
+        // If the user is logged in, skip checking flash drive and resetting controls
+        return;
+    }
+
     if (IsFlashDriveInserted('D'))
     {
         OnFlashDriveInserted();
@@ -150,9 +158,9 @@ void MainFrame::OnTimer(wxTimerEvent& evt)
 
     else
     {
-        ShowInsertCardText(false);
+        ShowInsertCardText(true);
         ShowEnterPincode(false);
-        ShowRegistrationControls(true);
+        ShowRegistrationControls(false);
         ShowTransactionControls(false);
         panel->Layout();
     }
@@ -162,10 +170,10 @@ void MainFrame::OnFlashDriveInserted()
 {
     if (bank.isCardRegistered())
     {
-        ShowEnterPincode(false);
+        ShowEnterPincode(true);
         ShowInsertCardText(false);
         ShowRegistrationControls(false);
-        ShowTransactionControls(true);                                                              
+        ShowTransactionControls(false);
     }
     else
     {
@@ -187,7 +195,7 @@ void MainFrame::OnRegisterButtonClicked(wxCommandEvent& evt)
     // Define your placeholders
     wxString namePlaceholder = "Name: ";
     wxString birthdayPlaceholder = "Birthday (MM-DD-YYYY): ";
-    wxString contactNumberPlaceholder = "Contact Number (+63 000-000-0000): ";
+    wxString contactNumberPlaceholder = "Contact Number (00000000000): ";
     wxString pinCodePlaceholder = "PIN Code (000000): ";
 
     // Basic validation (optional)
@@ -210,9 +218,9 @@ void MainFrame::OnRegisterButtonClicked(wxCommandEvent& evt)
         return;
     }
     
-    if (!wxRegEx("^(\\+63|0)\\d{10}$").Matches(contactNumber))
+    if (!wxRegEx("^(0)\\d{10}$").Matches(contactNumber))
     {
-        wxMessageBox("Contact Number must be in the format +630000000000 or 00000000000 (without spaces).", "Registration Error", wxOK | wxICON_ERROR);
+        wxMessageBox("Contact Number must be in the format 00000000000 (starts at 0 with 11 digits).", "Registration Error", wxOK | wxICON_ERROR);
         return;
     }
     
@@ -226,51 +234,33 @@ void MainFrame::OnRegisterButtonClicked(wxCommandEvent& evt)
 
     // Initial balance for new accounts (0.0 for new registrations)
     double initialBalance = 0.0;
+    string lastDigit = bank.getSignificantDigits(accountNumber);
+    string hashedPin = bank.hashPinCode(pincode.ToStdString(), lastDigit);
 
     // Create an Account object
     Account newAccount(accountNumber,
         name.ToStdString(), 
-        pincode.ToStdString(), 
+        hashedPin,
         birthday.ToStdString(), 
         contactNumber.ToStdString(), 
         initialBalance);
 
-    // Add the new account to the bank
-    bank.add(newAccount);
-
-    // Check if flash drive is inserted before saving the account
-    if (IsFlashDriveInserted('D'))
+    if (bank.accountDuplicationChecker(newAccount.name, newAccount.contactNumber))
     {
-        // Path to save the account on the flash drive
-        string filepath = "D:\\account.txt";
-
-        // Open the file on the flash drive for writing
-        ofstream outFile(filepath, ios::app);  // Use append mode to prevent overwriting
-        if (outFile.is_open())
-        {
-            outFile << newAccount.accountNumber << ","
-                << newAccount.name << ","
-                << newAccount.pincode << ","
-                << newAccount.birthday << ","
-                << newAccount.contactNumber << ","
-                << newAccount.balance << endl;
-
-            outFile.close();
-
-            // Notify the user of the successful save
-            wxMessageBox("Account Registered and saved to the flash drive!", "Success", wxOK | wxICON_INFORMATION);
-        }
-        else
-        {
-            wxMessageBox("Error: Unable to write to the flash drive.", "Error", wxOK | wxICON_ERROR);
-        }
+        wxMessageBox("Account Exist! Registration Denied.",
+            "Registration Error", wxOK | wxICON_ERROR);
     }
     else
     {
-        wxMessageBox("Flash drive not detected. Account registered, but not saved to the flash drive.", "Registration Successful", wxOK | wxICON_WARNING);
-    }   
+        // Add the new account to the bank
+        bank.add(newAccount);
 
-   
+        // Check if flash drive is inserted before saving the account
+        SaveAccountToFlashDrive(newAccount);
+
+        bank.saveAllAccounts();
+    }
+
     // Reset the input fields
     accountNameInputField->SetValue(namePlaceholder);
     birthdayInputField->SetValue(birthdayPlaceholder);
@@ -280,39 +270,7 @@ void MainFrame::OnRegisterButtonClicked(wxCommandEvent& evt)
 
 void MainFrame::OnWindowClose(wxCloseEvent& event)
 {
-    // Before closing, retrieve temporary accounts from the flash drive and add to bank
-    string flashDriveFilePath = string(1, bank.getDriveLetter()) + ":\\tempAccount.txt";
-    ifstream inputFile(flashDriveFilePath);
-
-    if (inputFile.is_open())
-    {
-        string line;
-        while (getline(inputFile, line))
-        {
-            stringstream stream(line);
-            string accountNumber, name, pincode, birthday, contactNumber, balanceStr;
-            double balance;
-
-            getline(stream, accountNumber, ',');
-            getline(stream, name, ',');
-            getline(stream, pincode, ',');
-            getline(stream, birthday, ',');
-            getline(stream, contactNumber, ',');
-            getline(stream, balanceStr, ',');
-
-            balance = stod(balanceStr);
-
-            // Create an Account object and add it to the bank
-            Account newAccount(accountNumber, name, pincode, birthday, contactNumber, balance);
-            if (!bank.accountExists(accountNumber)) 
-            {
-                bank.add(newAccount);
-            }
-        }
-        inputFile.close(); 
-    }
     bank.saveAllAccounts();
-    //wxMessageBox("Account Registered and saved to all accounts!", "Success", wxOK | wxICON_INFORMATION);
     event.Skip();
 }
 
@@ -360,6 +318,38 @@ void MainFrame::OnUnfocus(wxFocusEvent& event)
         }
     }
     event.Skip();
+}
+
+void MainFrame::SaveAccountToFlashDrive(const Account& newAccount, char driveLetter)
+{
+    if (IsFlashDriveInserted('D'))
+    {
+        char lastdigit = newAccount.accountNumber.back();  // Get the last character
+
+      /*  string hashedPin = bank.hashPinCode(newAccount.pincode, lastdigit);*/
+        string filepath = "D:\\account.txt";
+
+        // Open the file on the flash drive for writing
+        ofstream outFile(filepath, ios::app);  // Use append mode to prevent overwriting
+        if (outFile.is_open())
+        {
+            outFile << newAccount.accountNumber << endl // First line: account number
+                << newAccount.pincode << endl;
+            outFile.close();
+
+            // Notify the user of the successful save
+            wxMessageBox("Account Registered and saved to the flash drive!", "Success", wxOK | wxICON_INFORMATION);
+
+        }
+        else
+        {
+            wxMessageBox("Error: Unable to write to the flash drive.", "Error", wxOK | wxICON_ERROR);
+        }
+    }
+    else
+    {
+        wxMessageBox("Flash drive not detected. Account registered, but not saved to the flash drive.", "Registration Successful", wxOK | wxICON_WARNING);
+    }
 }
 
 bool MainFrame::IsFlashDriveInserted(char driveLetter)
@@ -412,6 +402,69 @@ void MainFrame::OnBalanceInquiryButtonClicked(wxCommandEvent& evt)
     balanceText->SetLabel(wxString::Format("Current Balance: %d", balance));
 
     balanceText->Show(true);
+    panel->Layout();
+}
+
+void MainFrame::OnEnterPincodeButton(wxCommandEvent& evt)
+{
+    wxString pincode = pincodeInputField->GetValue();
+    if (!wxRegEx("^\\d{6}$").Matches(pincode))
+    {
+        wxMessageBox("Invalid PIN Code. Please enter exactly 6 digits.", "PIN Error", wxOK | wxICON_ERROR);
+        return;
+    }
+    // Open the flash drive file to retrieve the account number from the first line
+    string flashDriveFilePath = string(1, bank.getDriveLetter()) + ":\\account.txt";
+    ifstream flashDriveFile(flashDriveFilePath);
+
+    if (!flashDriveFile.is_open())
+    {
+        wxMessageBox("Error: Unable to read the flash drive.", "Error", wxOK | wxICON_ERROR);
+        return;
+    }
+    
+    // Read the account number from the first line of the flash drive
+    string accountNumber;
+    getline(flashDriveFile, accountNumber);
+    flashDriveFile.close();
+
+    if (accountNumber.empty())
+    {
+        wxMessageBox("Error: Account number not found on the flash drive.", "Error", wxOK | wxICON_ERROR);
+        return;
+    }
+
+    string lastDigitOfAccNumber = bank.getSignificantDigits(accountNumber);
+    
+    string hashedPin = bank.hashPinCode(pincode.ToStdString(), lastDigitOfAccNumber);
+
+  
+    // Check if a matching account was found
+    if (bank.accountExists(hashedPin))
+    {
+        wxMessageBox("PIN verified successfully!", "Success", wxOK | wxICON_INFORMATION);
+
+        isLoggedIn = true;
+        // Proceed to show transaction options if PIN matched
+        ShowTransactionControls(true);
+        ShowEnterPincode(false);
+        panel->Layout();
+    }
+    else
+    {
+        wxMessageBox("Invalid PIN Code. Please try again.", "PIN Error", wxOK | wxICON_ERROR);
+    }
+}
+
+void MainFrame::OnTransactionCompleted()
+{
+    // Reset the isLoggedIn flag so the app can go back to the "Insert Card" state
+    isLoggedIn = false;
+
+    ShowInsertCardText(true);
+    ShowEnterPincode(false);
+    ShowRegistrationControls(false);
+    ShowTransactionControls(false);
     panel->Layout();
 }
 
