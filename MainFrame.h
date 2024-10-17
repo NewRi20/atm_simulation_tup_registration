@@ -10,6 +10,7 @@ public:
 private:
 	Account adminAccount;
 	Bank bank;
+	bool isLoggedIn;
 
 	void CreateControls();
 	void SetupSizers();
@@ -25,22 +26,42 @@ private:
 
 	void SaveAccountToFlashDrive(const Account& newAccount, char driveLetter = 'D');
 	bool IsFlashDriveInserted(char driveLetter);
-	bool isLoggedIn; 
+	
 	
 	void ShowInsertCardText(bool show);
 	void ShowEnterPincode(bool show);
 	void ShowRegistrationControls(bool show);
 	void ShowTransactionControls(bool show);
+	void ShowBalanceInquiryControls(bool show);
+	void ShowWithrawTransactionControls(bool show);
+	void ShowDepositTransactionControls(bool show);
+	void ShowFundTransferTransactionControls(bool show);
+	void ShowChangePincodeTransactionControls(bool show);
 
 	void OnBalanceInquiryButtonClicked(wxCommandEvent& evt);
 	void OnEnterPincodeButton(wxCommandEvent& evt);
 	void OnTransactionCompleted();
+	void OnConfirmBalanceInquiryButtonClicked(wxCommandEvent& evt);
+
+	void OnWithrawButtonClicked(wxCommandEvent& evt);
+	void OnConfirmWithrawButtonClicked(wxCommandEvent& evt);
+
+	void OnDepositButtonClicked(wxCommandEvent& evt);
+	void OnConfirmDepositButtonClicked(wxCommandEvent& evt);
+
+	void OnFundTransferButtonClicked(wxCommandEvent& evt);
+	void OnConfirmFundTransferButtonClicked(wxCommandEvent& evt);
+	
+	void OnChangePincodeButtonClicked(wxCommandEvent& evt);
+	void OnConfirmChangePincodeButonClicked(wxCommandEvent& evt);
+
+	void askForAnotherTrans(wxCommandEvent& evt);
 
 	wxPanel* panel;
 	wxTimer* timer;
 
 	wxStaticText* insertCardText;
-
+	wxStaticText* bankName;
 	wxStaticText* enterPincodeText;
 	wxTextCtrl* pincodeInputField;
 	wxButton* enterPincodeButton;
@@ -62,7 +83,33 @@ private:
 	wxStatusBar* statusBar;
 
 	// Balance Inquiry
-	wxStaticText* balanceText;
+
+
+
+	wxStaticText* BalanceText;
+	wxStaticText* WithrawText;
+	wxStaticText* DepositText;
 	
+
+	wxTextCtrl* WithrawInputField;
+	wxTextCtrl* DepositInputField;
+
+
+	wxButton* ConfirmBalanceInquiryButton;
+	wxButton* ConfirmWithrawButton;
+	wxButton* ConfirmDepositButton;
+
+	
+	wxStaticText* FundTransterText;
+	wxTextCtrl* receiverAccountInputField;
+	wxTextCtrl* fundTransferAmountInputField;
+	wxButton* ConfirmFundTransferButton;
+	
+
+	wxStaticText* ChangePincodeText;
+	wxTextCtrl* oldPincodeInputField;
+	wxTextCtrl* newPincodeInputField;
+	wxButton* ConfirmChangePincodeButton;
+
 };
 

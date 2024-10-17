@@ -130,6 +130,7 @@ void Bank::retrieveAllAccounts()
 
 void Bank::saveAllAccounts()
 {
+	updateAccount(currentAccount);
 	ofstream outputFile(filename);
 
 	if (!outputFile.is_open())
@@ -141,7 +142,6 @@ void Bank::saveAllAccounts()
 	
 	while (ptr)
 	{
-		/*string accHashedPinCode = hashPinCode(ptr->account.pincode, ptr->account.accountNumber.back());*/
 		outputFile << ptr->account.accountNumber << ","
 			<< ptr->account.name << ","
 			<< ptr->account.pincode << ","
@@ -151,6 +151,35 @@ void Bank::saveAllAccounts()
 		ptr = ptr->next;
 	}
 	outputFile.close();
+}
+
+Account& Bank::searchAccount(string& accountNumber)
+{
+	// TODO: insert return statement here
+	Node* current = head;
+
+	while (current) {
+		if (current->account.accountNumber == accountNumber)
+		{
+			return current->account;
+		}
+		current = current->next;
+	}
+}
+
+void Bank::updateAccount(Account& updatedAccount)
+{
+	Node* current = head;
+
+	while (current)
+	{
+		if (current->account.accountNumber == updatedAccount.accountNumber)
+		{
+			current->account = updatedAccount;  // Update the account in the node
+			return;
+		}
+		current = current->next;
+	}
 }
 
 void Bank::add(Account account)

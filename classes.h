@@ -57,6 +57,8 @@ public:
 	
 	void retrieveAllAccounts();
 	void saveAllAccounts();
+	Account& searchAccount(string& accountNumber);
+	void updateAccount(Account& updatedAccount);
 
 	bool accountDuplicationChecker(string name, string contactNum);
 	bool accountExists(const string& hashedaccountNum) const;
@@ -70,5 +72,11 @@ public:
 
 	string hashPinCode(const string& pincode, const string& accountNumber);
 	
+	
+	bool withraw(double amount);
+	bool deposit(double amount);
+	bool fundTransfer(const string& receiverAccountNumber, double amount);
+	bool changePincode(const string& oldP, const string& newP);
+	bool isNumber(const string& str);
 };
 

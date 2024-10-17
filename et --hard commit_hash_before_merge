@@ -1,0 +1,12 @@
+[33m33f569d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtransaction[m[33m)[m Merge trans & reg
+[33mc400aa4[m Local Changes
+[33m1e0373b[m FINAL TRANS
+[33m4dcfb9c[m Successfully added GUI and Transaction
+[33mdf9d82c[m Added Fund transfer
+[33m521cad3[m Added FundTransfer
+[33m69a4b95[m Successful withraw and deposit transaction
+[33m5c80716[m[33m ([m[1;32mmaster[m[33m)[m Commented wxMessageBox
+[33m7c44f27[m Completed Balance Inquiry Transaction
+[33m671d5c3[m Created basic structure of the application such as checkinging flash drive insertion logic, checking if account.txt exists in the flash drive, and showing and hiding buttons
+[33m46f85e2[m Implemented retrieveAllAccounts, saveAllAccounts, add, display methods of Bank class
+[33ma7a55b1[m initial commit

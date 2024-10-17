@@ -138,6 +138,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="registration.cpp" />
+    <ClCompile Include="transaction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
