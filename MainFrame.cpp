@@ -25,86 +25,137 @@ MainFrame::MainFrame(const wxString& title)
     BindEventHandlers();
 }
 
+
 void MainFrame::CreateControls()
 {
-    wxFont headlineFont(wxFontInfo(wxSize(0, 36)).Bold());
+    wxFont headlineFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    wxFont subtextFont(18, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
     wxFont mainFont(wxFontInfo(wxSize(0, 20)));
+    wxFont customTitleFont(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    wxFont bankNameFont(30, wxFONTFAMILY_DECORATIVE, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD);
 
     panel = new wxPanel(this);
     panel->SetFont(mainFont);
 
     timer = new wxTimer(this, wxID_ANY);
     timer->Start(2000);
-    
-    insertCardText = new wxStaticText(panel, wxID_ANY, "Please insert card...");
-    insertCardText->SetFont(headlineFont);
+
+    //Bank name
+    bankName = new wxStaticText(panel, wxID_ANY, "TechnoBank");
+    bankName->SetFont(bankNameFont);
+    bankName->SetForegroundColour(wxColour(192, 192, 192)); //192, 192, 192
+
+    //InsertCard text
+    wxFont customFont(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD);
+    insertCardText = new wxStaticText(panel, wxID_ANY, "Please insert card...", wxDefaultPosition, wxDefaultSize);
+    insertCardText->SetFont(customFont);
+    insertCardText->SetForegroundColour(wxColor(192, 192, 192));//192, 192, 192
 
     // Enter PIN Code Field
     enterPincodeText = new wxStaticText(panel, wxID_ANY, "Enter PIN Code");
-    enterPincodeText->SetFont(headlineFont);
+    enterPincodeText->SetFont(customTitleFont);
+    enterPincodeText->SetForegroundColour(wxColor(192, 192, 192));//215, 215, 215
     pincodeInputField = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
     enterPincodeButton = new wxButton(panel, wxID_ANY, "Enter PIN Code", wxDefaultPosition, wxDefaultSize);
 
-    // Registration Controlsz`
-    registrationText = new wxStaticText(panel, wxID_ANY, "Register for an Account");
-    registrationText->SetFont(headlineFont);
+    // Registration Controlsz
+    registrationText = new wxStaticText(panel, wxID_ANY, "Register for an Account", wxPoint(200, 100));
+    registrationText->SetFont(customTitleFont);
+    registrationText->SetForegroundColour(wxColor(192, 192, 192));//215, 215, 215
 
-    accountNameInputField = new wxTextCtrl(panel, wxID_ANY, "Name: ", wxDefaultPosition, wxDefaultSize); 
+
+    //Text for inputFields
+    wxFont InputheadlineFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+
+    accountNameInputField = new wxTextCtrl(panel, wxID_ANY, "Name: ", wxDefaultPosition, wxDefaultSize);
+    accountNameInputField->SetFont(InputheadlineFont);
+    accountNameInputField->SetForegroundColour(wxColor(118, 127, 125));//167, 172, 180
     birthdayInputField = new wxTextCtrl(panel, wxID_ANY, "Birthday (MM-DD-YYYY): ", wxDefaultPosition, wxDefaultSize);
-    contactNumberInputField = new wxTextCtrl(panel, wxID_ANY, "Contact Number(00000000000) : ", wxDefaultPosition, wxDefaultSize);
-    pinCodeInputField = new wxTextCtrl(panel, wxID_ANY, "PIN Code (000000): ", wxDefaultPosition, wxDefaultSize); 
+    birthdayInputField->SetFont(InputheadlineFont);
+    birthdayInputField->SetForegroundColour(wxColor(118, 127, 125));//167, 172, 180
+    contactNumberInputField = new wxTextCtrl(panel, wxID_ANY, "Contact Number(00000000000): ", wxDefaultPosition, wxDefaultSize);
+    contactNumberInputField->SetFont(InputheadlineFont);
+    contactNumberInputField->SetForegroundColour(wxColor(118, 127, 125));//167, 172, 180
+    pinCodeInputField = new wxTextCtrl(panel, wxID_ANY, "PIN Code (000000): ", wxDefaultPosition, wxDefaultSize);
+    pinCodeInputField->SetFont(InputheadlineFont);
+    pinCodeInputField->SetForegroundColour(wxColor(118, 127, 125));//167, 172, 180
 
     registerButton = new wxButton(panel, wxID_ANY, "Register");
-  
+
     // Transaction Controls
     transactionText = new wxStaticText(panel, wxID_ANY, "Choose a Transaction");
-    transactionText->SetFont(headlineFont);
+    transactionText->SetFont(customTitleFont);
+    transactionText->SetForegroundColour(*wxWHITE);
     balanceInquiryButton = new wxButton(panel, wxID_ANY, "Balance Inquiry");
     withdrawButton = new wxButton(panel, wxID_ANY, "Withdraw");
     depositButton = new wxButton(panel, wxID_ANY, "Deposit");
     fundTransferButton = new wxButton(panel, wxID_ANY, "Fund Transfer");
     changePinButton = new wxButton(panel, wxID_ANY, "Change PIN Code");
 
+    //InputFieldSizes
+    int maxInputWidth = 650; 
+
+    accountNameInputField->SetMaxSize(wxSize(maxInputWidth, -1)); 
+    birthdayInputField->SetMaxSize(wxSize(maxInputWidth, -1));
+    contactNumberInputField->SetMaxSize(wxSize(maxInputWidth, -1));
+    pinCodeInputField->SetMaxSize(wxSize(maxInputWidth, -1));
+
+    accountNameInputField->SetMinSize(wxSize(maxInputWidth, -1));
+    birthdayInputField->SetMinSize(wxSize(maxInputWidth, -1));
+    contactNumberInputField->SetMinSize(wxSize(maxInputWidth, -1));
+    pinCodeInputField->SetMinSize(wxSize(maxInputWidth, -1));
 
     //                  INSIDE TRANS
     // Balance Inquiry Controls
     //BalanceText = new wxStaticText(panel, wxID_ANY, "Current Balance");
 
     // balance
+
     BalanceText = new wxStaticText(panel, wxID_ANY, "Current Balance");
-    BalanceText->SetFont(headlineFont);
-    ConfirmBalanceInquiryButton = new wxButton(panel, wxID_ANY, "Confirm");
+    BalanceText->SetFont(subtextFont);
+    BalanceText->SetForegroundColour(wxColor(255, 255, 255));
+    ConfirmBalanceInquiryButton = new wxButton(panel, wxID_ANY, "Confirm", wxDefaultPosition, wxDefaultSize);
 
     //withraw Controls
-    WithrawText = new wxStaticText(panel, wxID_ANY, "Withraw Transaction", wxPoint(0, 22), wxSize(800, -1), wxALIGN_CENTER_HORIZONTAL);
-    WithrawText->SetFont(headlineFont);
-    WithrawInputField = new wxTextCtrl(panel, wxID_ANY, "Amount", wxDefaultPosition, wxDefaultSize);
-    ConfirmWithrawButton = new wxButton(panel, wxID_ANY, "Confirm");
+    WithrawText = new wxStaticText(panel, wxID_ANY, "Withraw Transaction", wxDefaultPosition, wxDefaultSize);
+    WithrawText->SetFont(subtextFont);
+    WithrawText->SetForegroundColour(wxColor(255, 255, 255));
+    WithrawInputField = new wxTextCtrl(panel, wxID_ANY, "Withdraw amount: ", wxDefaultPosition, wxDefaultSize);
+    WithrawInputField->SetForegroundColour(wxColour(118, 127, 125));
+    ConfirmWithrawButton = new wxButton(panel, wxID_ANY, "Confirm", wxDefaultPosition, wxDefaultSize);
 
     //  DEPOSIT CONTROLS
-    DepositText = new wxStaticText(panel, wxID_ANY, "Deposit Transaction", wxPoint(0, 22), wxSize(800, -1), wxALIGN_CENTER_HORIZONTAL);
-    DepositText->SetFont(headlineFont);
-    DepositInputField = new wxTextCtrl(panel, wxID_ANY, "Amount", wxDefaultPosition, wxDefaultSize);
-    ConfirmDepositButton = new wxButton(panel, wxID_ANY, "Confirm");
+    DepositText = new wxStaticText(panel, wxID_ANY, "Deposit Transaction", wxDefaultPosition, wxDefaultSize);
+    DepositText->SetFont(subtextFont);
+    DepositText->SetForegroundColour(wxColor(255, 255, 255));
+    DepositInputField = new wxTextCtrl(panel, wxID_ANY, "Deposit amount: ", wxDefaultPosition, wxDefaultSize);
+    DepositInputField->SetForegroundColour(wxColour(118, 127, 125));
+    ConfirmDepositButton = new wxButton(panel, wxID_ANY, "Confirm", wxDefaultPosition, wxDefaultSize);
 
     //  FUND TRANSFER CONTROLS
-    FundTransterText = new wxStaticText(panel, wxID_ANY, "Fund Transfer", wxPoint(0, 22), wxSize(800, -1), wxALIGN_CENTER_HORIZONTAL);
-    FundTransterText->SetFont(headlineFont);
-    receiverAccountInputField = new wxTextCtrl(panel, wxID_ANY, "Recipient Account Number", wxDefaultPosition, wxDefaultSize);
-    fundTransferAmountInputField = new wxTextCtrl(panel, wxID_ANY, "Amount", wxDefaultPosition, wxDefaultSize);
-    ConfirmFundTransferButton = new wxButton(panel, wxID_ANY, "Confirm Transfer");
+    FundTransterText = new wxStaticText(panel, wxID_ANY, "Fund Transfer", wxDefaultPosition, wxDefaultSize);
+    FundTransterText->SetFont(subtextFont);
+    FundTransterText->SetForegroundColour(wxColor(255, 255, 255));
+    receiverAccountInputField = new wxTextCtrl(panel, wxID_ANY, "Recipient Account Number: ", wxDefaultPosition, wxDefaultSize);
+    fundTransferAmountInputField = new wxTextCtrl(panel, wxID_ANY, "Transfer amount: ", wxDefaultPosition, wxDefaultSize);
+    receiverAccountInputField->SetForegroundColour(wxColour(118, 127, 125));
+    fundTransferAmountInputField->SetForegroundColour(wxColour(118, 127, 125));
+    ConfirmFundTransferButton = new wxButton(panel, wxID_ANY, "Confirm Transfer", wxDefaultPosition, wxDefaultSize);
 
     //  CHANGE PIN CODE CONTROLS
-    ChangePincodeText = new wxStaticText(panel, wxID_ANY, "Change PinCode", wxPoint(0, 22), wxSize(800, -1), wxALIGN_CENTER_HORIZONTAL);
-    ChangePincodeText->SetFont(headlineFont);
-    oldPincodeInputField = new wxTextCtrl(panel, wxID_ANY, "Old PinCode", wxDefaultPosition, wxDefaultSize);
-    newPincodeInputField = new wxTextCtrl(panel, wxID_ANY, "New PinCode", wxDefaultPosition, wxDefaultSize);
-    ConfirmChangePincodeButton = new wxButton(panel, wxID_ANY, "Confirm Changes");
+    ChangePincodeText = new wxStaticText(panel, wxID_ANY, "Change PinCode", wxDefaultPosition, wxDefaultSize);
+    ChangePincodeText->SetFont(subtextFont);
+    ChangePincodeText->SetForegroundColour(wxColor(255, 255, 255));
+    oldPincodeInputField = new wxTextCtrl(panel, wxID_ANY, "Old PIN Code: ", wxDefaultPosition, wxDefaultSize);
+    newPincodeInputField = new wxTextCtrl(panel, wxID_ANY, "New PIN Code: ", wxDefaultPosition, wxDefaultSize);
+    oldPincodeInputField->SetForegroundColour(wxColour(118, 127, 125));
+    newPincodeInputField->SetForegroundColour(wxColour(118, 127, 125));
+    ConfirmChangePincodeButton = new wxButton(panel, wxID_ANY, "Confirm Changes", wxPoint(0, 22), wxDefaultSize);
 
 
 
     ShowInsertCardText(true);
-    ShowInsertCardText(true);  
+    ShowInsertCardText(true);
     ShowEnterPincode(false);
     ShowRegistrationControls(false);
     ShowTransactionControls(false);
@@ -113,7 +164,7 @@ void MainFrame::CreateControls()
     ShowDepositTransactionControls(false);
     ShowFundTransferTransactionControls(false);
     ShowChangePincodeTransactionControls(false);
-    
+
 
     statusBar = CreateStatusBar();
     statusBar->SetDoubleBuffered(true);
@@ -122,63 +173,197 @@ void MainFrame::CreateControls()
 void MainFrame::SetupSizers()
 {
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    panel->SetBackgroundColour(wxColor(60, 63, 69)); //60, 63, 69
 
-    mainSizer->Add(insertCardText, wxSizerFlags().Center());
+    //Gray panel, white panel background yung parent
+    wxPanel* grayPanel = new wxPanel(panel, wxID_ANY);
+    grayPanel->SetBackgroundColour(wxColor(60, 63, 69)); //60, 63, 69
+    grayPanel->SetMaxSize(wxSize(1300, 1300));
 
-    // Add a Box Sizer for PIN Code field and button
+    //Creating gray panel sizer. Set to gray panel
+    wxBoxSizer* grayPanelSizer = new wxBoxSizer(wxVERTICAL);
+    grayPanel->SetSizer(grayPanelSizer);
+
+    //Small box panel, top left (para mas lalo macenter yung atm screen)
+    wxPanel* smallBoxPanel = new wxPanel(grayPanel, wxID_ANY);
+    smallBoxPanel->SetBackgroundColour(wxColour(60, 63, 69)); //60, 63, 69  //another possible wxColour(100, 100, 100)
+    smallBoxPanel->SetMinSize(wxSize(100, 100));
+
+    wxBoxSizer* smallBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+    smallBoxPanel->SetSizer(smallBoxSizer);
+
+    //Add to gray panel sizer
+    grayPanelSizer->Add(smallBoxPanel, wxSizerFlags().Align(wxALIGN_LEFT).Border(wxALL, 5));
+
+    //Black border panel, border ng atm screen
+    wxPanel* blackBorderPanel = new wxPanel(grayPanel, wxID_ANY);
+    blackBorderPanel->SetBackgroundColour(wxColour(56, 59, 65)); //56, 59, 65
+    blackBorderPanel->SetMaxSize(wxSize(1410, 810));
+    blackBorderPanel->SetMinSize(wxSize(710, 410));
+
+    //Sizer for black border panel
+    wxBoxSizer* blackBorderSizer = new wxBoxSizer(wxVERTICAL);
+    blackBorderPanel->SetSizer(blackBorderSizer);
+
+    //White box sizer panel with blackBorderPanel as its parent (ito yung atm screen)
+    wxPanel* whiteBoxPanel = new wxPanel(blackBorderPanel, wxID_ANY);
+    whiteBoxPanel->SetBackgroundColour(wxColor(60, 70, 92)); //60, 70, 92
+    whiteBoxPanel->SetMaxSize(wxSize(1400, 800));
+    whiteBoxPanel->SetMinSize(wxSize(700, 400)); // <-- optional, dapat iadjust lahat if ever ibahin ung MinSize
+
+    //White box panel Sizer
+    wxBoxSizer* whiteBoxPanelSizer = new wxBoxSizer(wxVERTICAL);
+    whiteBoxPanel->SetSizer(whiteBoxPanelSizer);
+
+    //Reparent the controls to the whiteBoxPanel(eto nagpatulong ako gpt, di ko alam na ay reparent pala)
+    bankName->Reparent(grayPanel);
+    enterPincodeText->Reparent(whiteBoxPanel);
+    pincodeInputField->Reparent(whiteBoxPanel);
+    enterPincodeButton->Reparent(whiteBoxPanel);
+    registrationText->Reparent(whiteBoxPanel);
+    accountNameInputField->Reparent(whiteBoxPanel);
+    birthdayInputField->Reparent(whiteBoxPanel);
+    contactNumberInputField->Reparent(whiteBoxPanel);
+    pinCodeInputField->Reparent(whiteBoxPanel);
+    registerButton->Reparent(whiteBoxPanel);
+    transactionText->Reparent(whiteBoxPanel);
+    balanceInquiryButton->Reparent(whiteBoxPanel);
+    BalanceText->Reparent(whiteBoxPanel);
+    ConfirmBalanceInquiryButton->Reparent(whiteBoxPanel);
+    WithrawText->Reparent(whiteBoxPanel);
+    WithrawInputField->Reparent(whiteBoxPanel);
+    ConfirmWithrawButton->Reparent(whiteBoxPanel);
+    withdrawButton->Reparent(whiteBoxPanel);
+    depositButton->Reparent(whiteBoxPanel);
+    DepositText->Reparent(whiteBoxPanel);
+    DepositInputField->Reparent(whiteBoxPanel);
+    ConfirmDepositButton->Reparent(whiteBoxPanel);
+    fundTransferButton->Reparent(whiteBoxPanel);
+    FundTransterText->Reparent(whiteBoxPanel);
+    receiverAccountInputField->Reparent(whiteBoxPanel);
+    fundTransferAmountInputField->Reparent(whiteBoxPanel);
+    ConfirmFundTransferButton->Reparent(whiteBoxPanel);
+    changePinButton->Reparent(whiteBoxPanel);
+    ChangePincodeText->Reparent(whiteBoxPanel);
+    oldPincodeInputField->Reparent(whiteBoxPanel);
+    newPincodeInputField->Reparent(whiteBoxPanel);
+    ConfirmChangePincodeButton->Reparent(whiteBoxPanel);
+    insertCardText->Reparent(whiteBoxPanel);
+
+    //Bank Name
+    int BankxOffset = 350; //Right (+) or left (-)
+    int BankyOffset = 50; //Down (+) or up (-)
+    bankName->SetPosition(wxPoint((whiteBoxPanel->GetSize().GetWidth() - insertCardText->GetSize().GetWidth()) / 2 + BankxOffset,
+        (whiteBoxPanel->GetSize().GetHeight() - insertCardText->GetSize().GetHeight()) / 2 + BankyOffset));
+  
+    //Input pin sizer
     wxBoxSizer* inputPinSizer = new wxBoxSizer(wxHORIZONTAL);
+    pincodeInputField->SetMaxSize(wxSize(200, -1));
     inputPinSizer->Add(pincodeInputField, wxSizerFlags().Proportion(1));
     inputPinSizer->AddSpacer(5);
     inputPinSizer->Add(enterPincodeButton);
 
-    mainSizer->Add(enterPincodeText, wxSizerFlags().CenterHorizontal());
-    mainSizer->Add(inputPinSizer, wxSizerFlags().Expand());
-    
-    // Add Registration Controls to Sizer
-    mainSizer->Add(registrationText, wxSizerFlags().CenterHorizontal());
-    mainSizer->Add(accountNameInputField, wxSizerFlags().Expand());
-    mainSizer->Add(birthdayInputField, wxSizerFlags().Expand());
-    mainSizer->Add(contactNumberInputField, wxSizerFlags().Expand());
-    mainSizer->Add(pinCodeInputField, wxSizerFlags().Expand());
-    mainSizer->Add(registerButton, wxSizerFlags().Expand());
-    
-    // Add Transaction Controls to Sizer
-    mainSizer->Add(transactionText, wxSizerFlags().CenterHorizontal());
-    mainSizer->Add(balanceInquiryButton, wxSizerFlags().Expand());
-    mainSizer->Add(withdrawButton, wxSizerFlags().Expand());
-    mainSizer->Add(depositButton, wxSizerFlags().Expand());
-    mainSizer->Add(fundTransferButton, wxSizerFlags().Expand());
-    mainSizer->Add(changePinButton, wxSizerFlags().Expand());
+    //Set the position of insertCardText
+    int xOffset = 340; //Right (+) or left (-)
+    int yOffset = 160; //Down (+) or up (-)
+    insertCardText->SetPosition(wxPoint((whiteBoxPanel->GetSize().GetWidth() - insertCardText->GetSize().GetWidth()) / 2 + xOffset,
+        (whiteBoxPanel->GetSize().GetHeight() - insertCardText->GetSize().GetHeight()) / 2 + yOffset));
 
-    // Add Balance Inquiry Controls to Sizer
-    mainSizer->Add(BalanceText, wxSizerFlags().CenterHorizontal());
-    mainSizer->Add(ConfirmBalanceInquiryButton, wxSizerFlags().Expand().Border(wxALL, 10));
+    wxBoxSizer* mainContentSizer = new wxBoxSizer(wxVERTICAL);
 
-    mainSizer->Add(WithrawText, wxSizerFlags().CenterHorizontal());
-    mainSizer->Add(WithrawInputField, wxSizerFlags().Expand());
-    mainSizer->Add(ConfirmWithrawButton, wxSizerFlags().Expand().Border(wxALL, 10));
+    //Transaction Controls to white box panel sizer
+    wxSizer* transactionSizer = new wxBoxSizer(wxVERTICAL);
 
-    mainSizer->Add(DepositText, wxSizerFlags().CenterHorizontal());
-    mainSizer->Add(DepositInputField, wxSizerFlags().Expand());
-    mainSizer->Add(ConfirmDepositButton, wxSizerFlags().Expand().Border(wxALL, 10));
+    wxSize buttonSize(100, 40);
+    balanceInquiryButton->SetMinSize(buttonSize);
+    withdrawButton->SetMinSize(buttonSize);
+    depositButton->SetMinSize(buttonSize);
+    fundTransferButton->SetMinSize(buttonSize);
+    changePinButton->SetMinSize(buttonSize);
 
-    mainSizer->Add(FundTransterText, wxSizerFlags().CenterHorizontal());
-    mainSizer->Add(receiverAccountInputField, wxSizerFlags().Expand());
-    mainSizer->Add(fundTransferAmountInputField, wxSizerFlags().Expand());
-    mainSizer->Add(ConfirmFundTransferButton, wxSizerFlags().Expand().Border(wxALL, 10));
+    transactionSizer->Add(transactionText, wxSizerFlags().CenterHorizontal().Border(wxALL, 7));
+    transactionSizer->Add(balanceInquiryButton, wxSizerFlags(0).Expand().Border(wxALL, 7));
+    transactionSizer->Add(withdrawButton, wxSizerFlags(0).Expand().Border(wxALL, 7));
+    transactionSizer->Add(depositButton, wxSizerFlags(0).Expand().Border(wxALL, 7));
+    transactionSizer->Add(fundTransferButton, wxSizerFlags(0).Expand().Border(wxALL, 7));
+    transactionSizer->Add(changePinButton, wxSizerFlags(0).Expand().Border(wxALL, 7));
 
-    mainSizer->Add(ChangePincodeText, wxSizerFlags().CenterHorizontal());
-    mainSizer->Add(oldPincodeInputField, wxSizerFlags().CenterHorizontal());
-    mainSizer->Add(newPincodeInputField, wxSizerFlags().CenterHorizontal());
-    mainSizer->Add(ConfirmChangePincodeButton, wxSizerFlags().CenterHorizontal());
+    mainContentSizer->Add(transactionSizer, wxSizerFlags().Expand().Border(wxALL, 5));
 
+    whiteBoxPanelSizer->Add(mainContentSizer, wxSizerFlags().Expand().Border(wxALL, 5));
 
-    // Outer Sizer for Border 
-    wxGridSizer* outerSizer = new wxGridSizer(1);
-    outerSizer->Add(mainSizer, wxSizerFlags(1).Border(wxALL, 25).Expand());
+    //Balance
+    whiteBoxPanelSizer->Add(BalanceText, wxSizerFlags().CenterHorizontal().Border(wxALL, 130));
+    whiteBoxPanelSizer->Add(ConfirmBalanceInquiryButton, wxSizerFlags(0).CenterHorizontal().Border(wxALL, 30));
 
-    panel->SetSizer(outerSizer);
-    outerSizer->SetSizeHints(this);
+    //Withraw
+    WithrawInputField->SetMinSize(wxSize(300, 30));
+    whiteBoxPanelSizer->Add(WithrawText, wxSizerFlags().CenterHorizontal().Border(wxALL, 60));
+    whiteBoxPanelSizer->Add(WithrawInputField, wxSizerFlags().CenterHorizontal().Border(wxALL, 1));
+    whiteBoxPanelSizer->Add(ConfirmWithrawButton, wxSizerFlags(0).CenterHorizontal().Border(wxALL, 30));
+
+    //Deposit
+    DepositInputField->SetMinSize(wxSize(300, 30));
+    whiteBoxPanelSizer->Add(DepositText, wxSizerFlags().CenterHorizontal().Border(wxALL, 60));
+    whiteBoxPanelSizer->Add(DepositInputField, wxSizerFlags().CenterHorizontal().Border(wxALL, 1));
+    whiteBoxPanelSizer->Add(ConfirmDepositButton, wxSizerFlags(0).CenterHorizontal().Border(wxALL, 30));
+
+    //FundTransfer
+    receiverAccountInputField->SetMinSize(wxSize(300, 30));
+    fundTransferAmountInputField->SetMinSize(wxSize(300, 30));  
+    whiteBoxPanelSizer->Add(FundTransterText, wxSizerFlags().CenterHorizontal().Border(wxALL, 55));
+    whiteBoxPanelSizer->Add(receiverAccountInputField, wxSizerFlags(0).CenterHorizontal().Border(wxALL, 5));
+    whiteBoxPanelSizer->Add(fundTransferAmountInputField, wxSizerFlags(0).CenterHorizontal().Border(wxALL, 5));
+    whiteBoxPanelSizer->Add(ConfirmFundTransferButton, wxSizerFlags(0).CenterHorizontal().Border(wxALL, 40));
+
+    //ChangePincode
+    oldPincodeInputField->SetMinSize(wxSize(300, 30));
+    newPincodeInputField->SetMinSize(wxSize(300, 30));
+    whiteBoxPanelSizer->Add(ChangePincodeText, wxSizerFlags().CenterHorizontal().Border(wxALL, 55));
+    whiteBoxPanelSizer->Add(oldPincodeInputField, wxSizerFlags().CenterHorizontal().Border(wxALL, 5));
+    whiteBoxPanelSizer->Add(newPincodeInputField, wxSizerFlags().CenterHorizontal().Border(wxALL, 5));
+    whiteBoxPanelSizer->Add(ConfirmChangePincodeButton, wxSizerFlags(0).CenterHorizontal().Border(wxALL, 40));
+
+    //Registration Controls
+
+    wxSizer* registrationSizer = new wxBoxSizer(wxVERTICAL);
+    //registrationSizer->AddSpacer(10);
+
+    registrationSizer->Add(registrationText, wxSizerFlags().CenterHorizontal().Border(wxALL, 5));
+    //registrationSizer->AddSpacer(30);
+    registrationSizer->Add(accountNameInputField, wxSizerFlags().CenterHorizontal().Border(wxALL, 5));
+    registrationSizer->Add(birthdayInputField, wxSizerFlags().CenterHorizontal().Border(wxALL, 5));
+    registrationSizer->Add(contactNumberInputField, wxSizerFlags().CenterHorizontal().Border(wxALL, 5));
+    registrationSizer->Add(pinCodeInputField, wxSizerFlags().CenterHorizontal().Border(wxALL, 5));
+   // registrationSizer->AddSpacer(50);
+    registrationSizer->Add(registerButton, wxSizerFlags().CenterHorizontal().Border(wxALL, 5));
+
+    mainContentSizer->Add(registrationSizer, wxSizerFlags().Expand().Border(wxALL, 5));
+
+    //Merging input pin controls to the white box panel sizer
+    whiteBoxPanelSizer->AddSpacer(70);
+    whiteBoxPanelSizer->Add(enterPincodeText, wxSizerFlags().CenterHorizontal().Border(wxALL, 10));
+    whiteBoxPanelSizer->AddSpacer(70);
+    whiteBoxPanelSizer->Add(inputPinSizer, wxSizerFlags().CenterHorizontal().Border(wxALL, 5));
+
+    //WhiteBoxPanel to blackBorderSizer
+    blackBorderSizer->AddSpacer(5); //Pababa yung adjustment, top spacer
+    blackBorderSizer->Add(whiteBoxPanel, wxSizerFlags().Center().Proportion(0));
+    blackBorderSizer->AddSpacer(5); //Pataas yung adjustment, bottom spacer
+
+    //BlackBorderPanel to grayPanelSizer
+    grayPanelSizer->AddSpacer(20);
+    grayPanelSizer->Add(blackBorderPanel, wxSizerFlags().Center().Proportion(0));
+    grayPanelSizer->AddSpacer(20);
+
+    //GrayPanel to the main sizer
+    mainSizer->Add(grayPanel, wxSizerFlags().Expand().Proportion(1).Border(wxALL, 10));
+
+    //Set main sizer on the panel
+    panel->SetSizer(mainSizer);
+
+    panel->Layout();
+    mainSizer->Fit(panel);
 }
 
 void MainFrame::BindEventHandlers()
@@ -202,7 +387,27 @@ void MainFrame::BindEventHandlers()
     pinCodeInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
     pinCodeInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
 
-    //Bind Window Close Event and Save to .csvfile
+    //Transaction controls 
+
+    WithrawInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
+    WithrawInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
+
+    DepositInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
+    DepositInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
+
+    receiverAccountInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
+    receiverAccountInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
+
+    fundTransferAmountInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
+    fundTransferAmountInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
+
+    oldPincodeInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
+    oldPincodeInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
+
+    newPincodeInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
+    newPincodeInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
+
+    //Bind Window Close Event and Save to .csv file
     this->Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnWindowClose, this);
 
     withdrawButton->Bind(wxEVT_BUTTON, &MainFrame::OnWithrawButtonClicked, this);
@@ -215,22 +420,8 @@ void MainFrame::BindEventHandlers()
     ConfirmDepositButton->Bind(wxEVT_BUTTON, &MainFrame::OnConfirmDepositButtonClicked, this);
     ConfirmFundTransferButton->Bind(wxEVT_BUTTON, &MainFrame::OnConfirmFundTransferButtonClicked, this);
     ConfirmChangePincodeButton->Bind(wxEVT_BUTTON, &MainFrame::OnConfirmChangePincodeButonClicked, this);
+
     registerButton->Bind(wxEVT_BUTTON, &MainFrame::OnRegisterButtonClicked, this);
-
-    // Bind focus and unfocus events for the text controls
-    accountNameInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
-    accountNameInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
-
-    birthdayInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
-    birthdayInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
-
-    contactNumberInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
-    contactNumberInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
-
-    pinCodeInputField->Bind(wxEVT_SET_FOCUS, &MainFrame::OnFocus, this);
-    pinCodeInputField->Bind(wxEVT_KILL_FOCUS, &MainFrame::OnUnfocus, this);
-
-    this->Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnWindowClose, this);
 }
 
 void MainFrame::OnTimer(wxTimerEvent& evt)
@@ -289,7 +480,7 @@ void MainFrame::OnRegisterButtonClicked(wxCommandEvent& evt)
     wxString pinCodePlaceholder = "PIN Code (000000): ";
 
     // Basic validation (optional)
-    if (name.IsEmpty() || name == namePlaceholder || birthday.IsEmpty() || birthday == birthdayPlaceholder || 
+    if (name.IsEmpty() || name == namePlaceholder || birthday.IsEmpty() || birthday == birthdayPlaceholder ||
         contactNumber == contactNumberPlaceholder || contactNumber.IsEmpty() || pincode.IsEmpty() || pincode == pinCodePlaceholder)
     {
         wxMessageBox("Please fill in all the fields.", "Registration Error", wxOK | wxICON_ERROR);
@@ -301,22 +492,22 @@ void MainFrame::OnRegisterButtonClicked(wxCommandEvent& evt)
         wxMessageBox("Name must not exceed 30 characters.", "Registration Error", wxOK | wxICON_ERROR);
         return;
     }
-  
+
     if (!wxRegEx("^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])-(\\d{4})$").Matches(birthday))
     {
         wxMessageBox("Birthday must be in the format MM-DD-YYYY.", "Registration Error", wxOK | wxICON_ERROR);
         return;
     }
-    
+
     if (!wxRegEx("^(0)\\d{10}$").Matches(contactNumber))
     {
         wxMessageBox("Contact Number must be in the format 00000000000 (starts at 0 with 11 digits).", "Registration Error", wxOK | wxICON_ERROR);
         return;
     }
-    
+
     if (!wxRegEx("^\\d{6}$").Matches(pincode))
     {
-        wxMessageBox("PIN Code must be exactly 6 digits.", "Registration Error", wxOK | wxICON_ERROR);
+        wxMessageBox("PIN Code must be exactly 6 digits and should not contain any non-digit character.", "Registration Error", wxOK | wxICON_ERROR);
         return;
     }
 
@@ -329,10 +520,10 @@ void MainFrame::OnRegisterButtonClicked(wxCommandEvent& evt)
 
     // Create an Account object
     Account newAccount(accountNumber,
-        name.ToStdString(), 
+        name.ToStdString(),
         hashedPin,
-        birthday.ToStdString(), 
-        contactNumber.ToStdString(), 
+        birthday.ToStdString(),
+        contactNumber.ToStdString(),
         initialBalance);
 
     if (bank.accountDuplicationChecker(newAccount.name, newAccount.contactNumber))
@@ -360,7 +551,6 @@ void MainFrame::OnRegisterButtonClicked(wxCommandEvent& evt)
     // Go to Pincode
     ShowEnterPincode(true);
     ShowRegistrationControls(false);
-
 }
 
 void MainFrame::OnWindowClose(wxCloseEvent& event)
@@ -375,22 +565,36 @@ void MainFrame::OnFocus(wxFocusEvent& event)
     if (textCtrl)
     {
         wxString placeholder;
-        if (textCtrl == accountNameInputField)
+        if (textCtrl == accountNameInputField) 
             placeholder = "Name: ";
         else if (textCtrl == birthdayInputField)
             placeholder = "Birthday (MM-DD-YYYY): ";
-        else if (textCtrl == contactNumberInputField)   
-            placeholder = "Contact Number (+63 000-000-0000): ";
+        else if (textCtrl == contactNumberInputField)
+            placeholder = "Contact Number(00000000000): ";
         else if (textCtrl == pinCodeInputField)
             placeholder = "PIN Code (000000): ";
+        else if (textCtrl == WithrawInputField)
+            placeholder = "Withdraw amount: ";
+        else if (textCtrl == DepositInputField)
+            placeholder = "Deposit amount: ";
+        else if (textCtrl == receiverAccountInputField)
+            placeholder = "Recipient Account Number: ";
+        else if (textCtrl == fundTransferAmountInputField)
+            placeholder = "Transfer amount: ";
+        else if (textCtrl == oldPincodeInputField)
+            placeholder = "Old PIN Code: ";
+        else if (textCtrl == newPincodeInputField)
+            placeholder = "New PIN Code: ";
 
         if (textCtrl->GetValue() == placeholder)
         {
+            textCtrl->SetForegroundColour(*wxBLACK);
             textCtrl->SetValue("");
         }
     }
     event.Skip();
 }
+
 
 void MainFrame::OnUnfocus(wxFocusEvent& event)
 {
@@ -403,17 +607,31 @@ void MainFrame::OnUnfocus(wxFocusEvent& event)
         else if (textCtrl == birthdayInputField)
             placeholder = "Birthday (MM-DD-YYYY): ";
         else if (textCtrl == contactNumberInputField)
-            placeholder = "Contact Number (+63 000-000-0000): ";    
+            placeholder = "Contact Number(00000000000): ";
         else if (textCtrl == pinCodeInputField)
             placeholder = "PIN Code (000000): ";
+        else if (textCtrl == WithrawInputField)
+            placeholder = "Withdraw amount: ";
+        else if (textCtrl == DepositInputField)
+            placeholder = "Deposit amount: ";
+        else if (textCtrl == receiverAccountInputField)
+            placeholder = "Recipient Account Number: ";
+        else if (textCtrl == fundTransferAmountInputField)
+            placeholder = "Transfer amount: ";
+        else if (textCtrl == oldPincodeInputField)
+            placeholder = "Old PIN Code: ";
+        else if (textCtrl == newPincodeInputField)
+            placeholder = "New PIN Code: ";
 
         if (textCtrl->GetValue().IsEmpty())
         {
+            textCtrl->SetForegroundColour(wxColour(118, 127, 125));
             textCtrl->SetValue(placeholder);
         }
     }
     event.Skip();
 }
+
 
 void MainFrame::SaveAccountToFlashDrive(const Account& newAccount, char driveLetter)
 {
@@ -540,7 +758,7 @@ void MainFrame::OnBalanceInquiryButtonClicked(wxCommandEvent& evt)
     ShowBalanceInquiryControls(true);
     double balance = bank.currentAccount.balance;
 
-    BalanceText->SetLabel(wxString::Format("Current Balance: %.2f", balance));
+    BalanceText->SetLabel(wxString::Format("Current Balance: P%.2f", balance));
 
     BalanceText->Show(true);
     panel->Layout();
@@ -769,3 +987,4 @@ void MainFrame::askForAnotherTrans(wxCommandEvent& evt)
         Close(true);
     }
 }
+ 

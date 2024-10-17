@@ -38,7 +38,6 @@ private:
 	void ShowFundTransferTransactionControls(bool show);
 	void ShowChangePincodeTransactionControls(bool show);
 
-
 	void OnBalanceInquiryButtonClicked(wxCommandEvent& evt);
 	void OnEnterPincodeButton(wxCommandEvent& evt);
 	void OnTransactionCompleted();
@@ -62,7 +61,7 @@ private:
 	wxTimer* timer;
 
 	wxStaticText* insertCardText;
-
+	wxStaticText* bankName;
 	wxStaticText* enterPincodeText;
 	wxTextCtrl* pincodeInputField;
 	wxButton* enterPincodeButton;

@@ -61,7 +61,7 @@ bool Bank::changePincode(const string& oldP, const string& newP)
 		throw invalid_argument("Incorrect Old PIN");
 	}
 	if (newP.length() != 8) {
-		throw out_of_range("The PIN must be 6-Digits long");
+		throw out_of_range("PIN Code must be exactly 6 digits and should not contain any non-digit character.");
 	}
 	currentAccount.pincode = newP;
 	
