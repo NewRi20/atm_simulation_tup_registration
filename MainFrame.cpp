@@ -758,7 +758,7 @@ void MainFrame::OnBalanceInquiryButtonClicked(wxCommandEvent& evt)
     ShowBalanceInquiryControls(true);
     double balance = bank.currentAccount.balance;
 
-    BalanceText->SetLabel(wxString::Format("Current Balance: %.2f", balance));
+    BalanceText->SetLabel(wxString::Format("Current Balance: P%.2f", balance));
 
     BalanceText->Show(true);
     panel->Layout();
