@@ -43,25 +43,25 @@ void MainFrame::CreateControls()
     //Bank name
     bankName = new wxStaticText(panel, wxID_ANY, "TechnoBank");
     bankName->SetFont(bankNameFont);
-    bankName->SetForegroundColour(wxColour(235, 250, 219)); //192, 192, 192
+    bankName->SetForegroundColour(wxColour(192, 192, 192)); //192, 192, 192
 
     //InsertCard text
     wxFont customFont(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD);
     insertCardText = new wxStaticText(panel, wxID_ANY, "Please insert card...", wxDefaultPosition, wxDefaultSize);
     insertCardText->SetFont(customFont);
-    insertCardText->SetForegroundColour(wxColor(235, 250, 219));//192, 192, 192
+    insertCardText->SetForegroundColour(wxColor(192, 192, 192));//192, 192, 192
 
     // Enter PIN Code Field
     enterPincodeText = new wxStaticText(panel, wxID_ANY, "Enter PIN Code");
     enterPincodeText->SetFont(customTitleFont);
-    enterPincodeText->SetForegroundColour(wxColor(235, 250, 219));//215, 215, 215
+    enterPincodeText->SetForegroundColour(wxColor(192, 192, 192));//215, 215, 215
     pincodeInputField = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
     enterPincodeButton = new wxButton(panel, wxID_ANY, "Enter PIN Code", wxDefaultPosition, wxDefaultSize);
 
     // Registration Controlsz
     registrationText = new wxStaticText(panel, wxID_ANY, "Register for an Account", wxPoint(200, 100));
     registrationText->SetFont(customTitleFont);
-    registrationText->SetForegroundColour(wxColor(235, 250, 219));//215, 215, 215
+    registrationText->SetForegroundColour(wxColor(192, 192, 192));//215, 215, 215
 
 
     //Text for inputFields
@@ -73,7 +73,7 @@ void MainFrame::CreateControls()
     birthdayInputField = new wxTextCtrl(panel, wxID_ANY, "Birthday (MM-DD-YYYY): ", wxDefaultPosition, wxDefaultSize);
     birthdayInputField->SetFont(InputheadlineFont);
     birthdayInputField->SetForegroundColour(wxColor(118, 127, 125));//167, 172, 180
-    contactNumberInputField = new wxTextCtrl(panel, wxID_ANY, "Contact Number(00000000000) : ", wxDefaultPosition, wxDefaultSize);
+    contactNumberInputField = new wxTextCtrl(panel, wxID_ANY, "Contact Number(00000000000): ", wxDefaultPosition, wxDefaultSize);
     contactNumberInputField->SetFont(InputheadlineFont);
     contactNumberInputField->SetForegroundColour(wxColor(118, 127, 125));//167, 172, 180
     pinCodeInputField = new wxTextCtrl(panel, wxID_ANY, "PIN Code (000000): ", wxDefaultPosition, wxDefaultSize);
@@ -113,37 +113,43 @@ void MainFrame::CreateControls()
 
     BalanceText = new wxStaticText(panel, wxID_ANY, "Current Balance");
     BalanceText->SetFont(subtextFont);
-    BalanceText->SetForegroundColour(wxColor(16, 93, 94));
+    BalanceText->SetForegroundColour(wxColor(255, 255, 255));
     ConfirmBalanceInquiryButton = new wxButton(panel, wxID_ANY, "Confirm", wxDefaultPosition, wxDefaultSize);
 
     //withraw Controls
     WithrawText = new wxStaticText(panel, wxID_ANY, "Withraw Transaction", wxDefaultPosition, wxDefaultSize);
     WithrawText->SetFont(subtextFont);
-    WithrawText->SetForegroundColour(wxColor(16, 93, 94));
+    WithrawText->SetForegroundColour(wxColor(255, 255, 255));
     WithrawInputField = new wxTextCtrl(panel, wxID_ANY, "Withdraw amount: ", wxDefaultPosition, wxDefaultSize);
+    WithrawInputField->SetForegroundColour(wxColour(118, 127, 125));
     ConfirmWithrawButton = new wxButton(panel, wxID_ANY, "Confirm", wxDefaultPosition, wxDefaultSize);
 
     //  DEPOSIT CONTROLS
     DepositText = new wxStaticText(panel, wxID_ANY, "Deposit Transaction", wxDefaultPosition, wxDefaultSize);
     DepositText->SetFont(subtextFont);
-    DepositText->SetForegroundColour(wxColor(16, 93, 94));
+    DepositText->SetForegroundColour(wxColor(255, 255, 255));
     DepositInputField = new wxTextCtrl(panel, wxID_ANY, "Deposit amount: ", wxDefaultPosition, wxDefaultSize);
+    DepositInputField->SetForegroundColour(wxColour(118, 127, 125));
     ConfirmDepositButton = new wxButton(panel, wxID_ANY, "Confirm", wxDefaultPosition, wxDefaultSize);
 
     //  FUND TRANSFER CONTROLS
     FundTransterText = new wxStaticText(panel, wxID_ANY, "Fund Transfer", wxDefaultPosition, wxDefaultSize);
     FundTransterText->SetFont(subtextFont);
-    FundTransterText->SetForegroundColour(wxColor(16, 93, 94));
+    FundTransterText->SetForegroundColour(wxColor(255, 255, 255));
     receiverAccountInputField = new wxTextCtrl(panel, wxID_ANY, "Recipient Account Number: ", wxDefaultPosition, wxDefaultSize);
     fundTransferAmountInputField = new wxTextCtrl(panel, wxID_ANY, "Transfer amount: ", wxDefaultPosition, wxDefaultSize);
+    receiverAccountInputField->SetForegroundColour(wxColour(118, 127, 125));
+    fundTransferAmountInputField->SetForegroundColour(wxColour(118, 127, 125));
     ConfirmFundTransferButton = new wxButton(panel, wxID_ANY, "Confirm Transfer", wxDefaultPosition, wxDefaultSize);
 
     //  CHANGE PIN CODE CONTROLS
     ChangePincodeText = new wxStaticText(panel, wxID_ANY, "Change PinCode", wxDefaultPosition, wxDefaultSize);
     ChangePincodeText->SetFont(subtextFont);
-    ChangePincodeText->SetForegroundColour(wxColor(16, 93, 94));
+    ChangePincodeText->SetForegroundColour(wxColor(255, 255, 255));
     oldPincodeInputField = new wxTextCtrl(panel, wxID_ANY, "Old PIN Code: ", wxDefaultPosition, wxDefaultSize);
     newPincodeInputField = new wxTextCtrl(panel, wxID_ANY, "New PIN Code: ", wxDefaultPosition, wxDefaultSize);
+    oldPincodeInputField->SetForegroundColour(wxColour(118, 127, 125));
+    newPincodeInputField->SetForegroundColour(wxColour(118, 127, 125));
     ConfirmChangePincodeButton = new wxButton(panel, wxID_ANY, "Confirm Changes", wxPoint(0, 22), wxDefaultSize);
 
 
@@ -167,11 +173,11 @@ void MainFrame::CreateControls()
 void MainFrame::SetupSizers()
 {
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-    panel->SetBackgroundColour(wxColor(16, 93, 94)); //60, 63, 69
+    panel->SetBackgroundColour(wxColor(60, 63, 69)); //60, 63, 69
 
     //Gray panel, white panel background yung parent
     wxPanel* grayPanel = new wxPanel(panel, wxID_ANY);
-    grayPanel->SetBackgroundColour(wxColor(16, 93, 94)); //60, 63, 69
+    grayPanel->SetBackgroundColour(wxColor(60, 63, 69)); //60, 63, 69
     grayPanel->SetMaxSize(wxSize(1300, 1300));
 
     //Creating gray panel sizer. Set to gray panel
@@ -180,7 +186,7 @@ void MainFrame::SetupSizers()
 
     //Small box panel, top left (para mas lalo macenter yung atm screen)
     wxPanel* smallBoxPanel = new wxPanel(grayPanel, wxID_ANY);
-    smallBoxPanel->SetBackgroundColour(wxColour(16, 93, 94)); //60, 63, 69  //another possible wxColour(100, 100, 100)
+    smallBoxPanel->SetBackgroundColour(wxColour(60, 63, 69)); //60, 63, 69  //another possible wxColour(100, 100, 100)
     smallBoxPanel->SetMinSize(wxSize(100, 100));
 
     wxBoxSizer* smallBoxSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -191,7 +197,7 @@ void MainFrame::SetupSizers()
 
     //Black border panel, border ng atm screen
     wxPanel* blackBorderPanel = new wxPanel(grayPanel, wxID_ANY);
-    blackBorderPanel->SetBackgroundColour(wxColour(42, 61, 51)); //56, 59, 65
+    blackBorderPanel->SetBackgroundColour(wxColour(56, 59, 65)); //56, 59, 65
     blackBorderPanel->SetMaxSize(wxSize(1410, 810));
     blackBorderPanel->SetMinSize(wxSize(710, 410));
 
@@ -201,7 +207,7 @@ void MainFrame::SetupSizers()
 
     //White box sizer panel with blackBorderPanel as its parent (ito yung atm screen)
     wxPanel* whiteBoxPanel = new wxPanel(blackBorderPanel, wxID_ANY);
-    whiteBoxPanel->SetBackgroundColour(wxColor(179, 237, 169)); //60, 70, 92
+    whiteBoxPanel->SetBackgroundColour(wxColor(60, 70, 92)); //60, 70, 92
     whiteBoxPanel->SetMaxSize(wxSize(1400, 800));
     whiteBoxPanel->SetMinSize(wxSize(700, 400)); // <-- optional, dapat iadjust lahat if ever ibahin ung MinSize
 
@@ -501,7 +507,7 @@ void MainFrame::OnRegisterButtonClicked(wxCommandEvent& evt)
 
     if (!wxRegEx("^\\d{6}$").Matches(pincode))
     {
-        wxMessageBox("PIN Code must be exactly 6 digits.", "Registration Error", wxOK | wxICON_ERROR);
+        wxMessageBox("PIN Code must be exactly 6 digits and should not contain any non-digit character.", "Registration Error", wxOK | wxICON_ERROR);
         return;
     }
 
@@ -559,12 +565,12 @@ void MainFrame::OnFocus(wxFocusEvent& event)
     if (textCtrl)
     {
         wxString placeholder;
-        if (textCtrl == accountNameInputField)
+        if (textCtrl == accountNameInputField) 
             placeholder = "Name: ";
         else if (textCtrl == birthdayInputField)
             placeholder = "Birthday (MM-DD-YYYY): ";
         else if (textCtrl == contactNumberInputField)
-            placeholder = "Contact Number (+63 000-000-0000): ";
+            placeholder = "Contact Number(00000000000): ";
         else if (textCtrl == pinCodeInputField)
             placeholder = "PIN Code (000000): ";
         else if (textCtrl == WithrawInputField)
@@ -582,6 +588,7 @@ void MainFrame::OnFocus(wxFocusEvent& event)
 
         if (textCtrl->GetValue() == placeholder)
         {
+            textCtrl->SetForegroundColour(*wxBLACK);
             textCtrl->SetValue("");
         }
     }
@@ -600,7 +607,7 @@ void MainFrame::OnUnfocus(wxFocusEvent& event)
         else if (textCtrl == birthdayInputField)
             placeholder = "Birthday (MM-DD-YYYY): ";
         else if (textCtrl == contactNumberInputField)
-            placeholder = "Contact Number (+63 000-000-0000): ";
+            placeholder = "Contact Number(00000000000): ";
         else if (textCtrl == pinCodeInputField)
             placeholder = "PIN Code (000000): ";
         else if (textCtrl == WithrawInputField)
@@ -618,6 +625,7 @@ void MainFrame::OnUnfocus(wxFocusEvent& event)
 
         if (textCtrl->GetValue().IsEmpty())
         {
+            textCtrl->SetForegroundColour(wxColour(118, 127, 125));
             textCtrl->SetValue(placeholder);
         }
     }
