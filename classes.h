@@ -7,8 +7,6 @@
 #include <wx/string.h>
 #include <wx/wx.h>
 
-
-
 using namespace std;
 
 struct Account

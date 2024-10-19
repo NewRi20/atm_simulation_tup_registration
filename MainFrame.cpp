@@ -15,9 +15,7 @@ MainFrame::MainFrame(const wxString& title)
     adminAccount("00000", "admin", "123456", "09-28-2004", "+63 909-320-5093", 1000000.0),
     bank(adminAccount) 
 {  
-    
-    /*wxMessageBox(wxString::Format("Admin Balance: %f", adminAccount.balance), "Balance Inquiry", wxOK | wxICON_INFORMATION);
-    wxMessageBox(wxString::Format("Current Account Balance: %f", bank.currentAccount.balance), "Balance Inquiry", wxOK | wxICON_INFORMATION);*/
+
     bank.retrieveAllAccounts();
     isLoggedIn = false;
     CreateControls();
@@ -105,11 +103,6 @@ void MainFrame::CreateControls()
     contactNumberInputField->SetMinSize(wxSize(maxInputWidth, -1));
     pinCodeInputField->SetMinSize(wxSize(maxInputWidth, -1));
 
-    //                  INSIDE TRANS
-    // Balance Inquiry Controls
-    //BalanceText = new wxStaticText(panel, wxID_ANY, "Current Balance");
-
-    // balance
 
     BalanceText = new wxStaticText(panel, wxID_ANY, "Current Balance");
     BalanceText->SetFont(subtextFont);
@@ -173,49 +166,49 @@ void MainFrame::CreateControls()
 void MainFrame::SetupSizers()
 {
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-    panel->SetBackgroundColour(wxColor(60, 63, 69)); //60, 63, 69
+    panel->SetBackgroundColour(wxColor(60, 63, 69));
 
-    //Gray panel, white panel background yung parent
+    // Gray panel, panel background as its parent
     wxPanel* grayPanel = new wxPanel(panel, wxID_ANY);
-    grayPanel->SetBackgroundColour(wxColor(60, 63, 69)); //60, 63, 69
+    grayPanel->SetBackgroundColour(wxColor(60, 63, 69)); 
     grayPanel->SetMaxSize(wxSize(1300, 1300));
 
-    //Creating gray panel sizer. Set to gray panel
+    // Creating gray panel sizer. Set to gray panel
     wxBoxSizer* grayPanelSizer = new wxBoxSizer(wxVERTICAL);
     grayPanel->SetSizer(grayPanelSizer);
 
-    //Small box panel, top left (para mas lalo macenter yung atm screen)
+    // Small box panel, top left (to center ATM screen)
     wxPanel* smallBoxPanel = new wxPanel(grayPanel, wxID_ANY);
-    smallBoxPanel->SetBackgroundColour(wxColour(60, 63, 69)); //60, 63, 69  //another possible wxColour(100, 100, 100)
+    smallBoxPanel->SetBackgroundColour(wxColour(60, 63, 69)); 
     smallBoxPanel->SetMinSize(wxSize(100, 100));
 
     wxBoxSizer* smallBoxSizer = new wxBoxSizer(wxHORIZONTAL);
     smallBoxPanel->SetSizer(smallBoxSizer);
 
-    //Add to gray panel sizer
+    // Add to gray panel sizer
     grayPanelSizer->Add(smallBoxPanel, wxSizerFlags().Align(wxALIGN_LEFT).Border(wxALL, 5));
 
-    //Black border panel, border ng atm screen
+    // Black border panel
     wxPanel* blackBorderPanel = new wxPanel(grayPanel, wxID_ANY);
-    blackBorderPanel->SetBackgroundColour(wxColour(56, 59, 65)); //56, 59, 65
+    blackBorderPanel->SetBackgroundColour(wxColour(56, 59, 65));
     blackBorderPanel->SetMaxSize(wxSize(1410, 810));
     blackBorderPanel->SetMinSize(wxSize(710, 410));
 
-    //Sizer for black border panel
+    // Sizer for black border panel
     wxBoxSizer* blackBorderSizer = new wxBoxSizer(wxVERTICAL);
     blackBorderPanel->SetSizer(blackBorderSizer);
 
-    //White box sizer panel with blackBorderPanel as its parent (ito yung atm screen)
+    // White box sizer panel with blackBorderPanel as its parent 
     wxPanel* whiteBoxPanel = new wxPanel(blackBorderPanel, wxID_ANY);
-    whiteBoxPanel->SetBackgroundColour(wxColor(60, 70, 92)); //60, 70, 92
+    whiteBoxPanel->SetBackgroundColour(wxColor(60, 70, 92)); 
     whiteBoxPanel->SetMaxSize(wxSize(1400, 800));
-    whiteBoxPanel->SetMinSize(wxSize(700, 400)); // <-- optional, dapat iadjust lahat if ever ibahin ung MinSize
+    whiteBoxPanel->SetMinSize(wxSize(700, 400)); 
 
     //White box panel Sizer
     wxBoxSizer* whiteBoxPanelSizer = new wxBoxSizer(wxVERTICAL);
     whiteBoxPanel->SetSizer(whiteBoxPanelSizer);
 
-    //Reparent the controls to the whiteBoxPanel(eto nagpatulong ako gpt, di ko alam na ay reparent pala)
+    //Reparent the controls to the whiteBoxPanel
     bankName->Reparent(grayPanel);
     enterPincodeText->Reparent(whiteBoxPanel);
     pincodeInputField->Reparent(whiteBoxPanel);
@@ -251,8 +244,8 @@ void MainFrame::SetupSizers()
     insertCardText->Reparent(whiteBoxPanel);
 
     //Bank Name
-    int BankxOffset = 350; //Right (+) or left (-)
-    int BankyOffset = 50; //Down (+) or up (-)
+    int BankxOffset = 350; 
+    int BankyOffset = 50; 
     bankName->SetPosition(wxPoint((whiteBoxPanel->GetSize().GetWidth() - insertCardText->GetSize().GetWidth()) / 2 + BankxOffset,
         (whiteBoxPanel->GetSize().GetHeight() - insertCardText->GetSize().GetHeight()) / 2 + BankyOffset));
   
@@ -264,8 +257,8 @@ void MainFrame::SetupSizers()
     inputPinSizer->Add(enterPincodeButton);
 
     //Set the position of insertCardText
-    int xOffset = 340; //Right (+) or left (-)
-    int yOffset = 160; //Down (+) or up (-)
+    int xOffset = 340; 
+    int yOffset = 160; 
     insertCardText->SetPosition(wxPoint((whiteBoxPanel->GetSize().GetWidth() - insertCardText->GetSize().GetWidth()) / 2 + xOffset,
         (whiteBoxPanel->GetSize().GetHeight() - insertCardText->GetSize().GetHeight()) / 2 + yOffset));
 
@@ -347,9 +340,9 @@ void MainFrame::SetupSizers()
     whiteBoxPanelSizer->Add(inputPinSizer, wxSizerFlags().CenterHorizontal().Border(wxALL, 5));
 
     //WhiteBoxPanel to blackBorderSizer
-    blackBorderSizer->AddSpacer(5); //Pababa yung adjustment, top spacer
+    blackBorderSizer->AddSpacer(5); 
     blackBorderSizer->Add(whiteBoxPanel, wxSizerFlags().Center().Proportion(0));
-    blackBorderSizer->AddSpacer(5); //Pataas yung adjustment, bottom spacer
+    blackBorderSizer->AddSpacer(5); 
 
     //BlackBorderPanel to grayPanelSizer
     grayPanelSizer->AddSpacer(20);
@@ -426,9 +419,6 @@ void MainFrame::BindEventHandlers()
 
 void MainFrame::OnTimer(wxTimerEvent& evt)
 {
-   
-   
-
     if (IsFlashDriveInserted('D'))
     {
         timer->Stop();
@@ -551,6 +541,7 @@ void MainFrame::OnRegisterButtonClicked(wxCommandEvent& evt)
     // Go to Pincode
     ShowEnterPincode(true);
     ShowRegistrationControls(false);
+    panel->Layout();
 }
 
 void MainFrame::OnWindowClose(wxCloseEvent& event)
@@ -639,7 +630,6 @@ void MainFrame::SaveAccountToFlashDrive(const Account& newAccount, char driveLet
     {
         char lastdigit = newAccount.accountNumber.back();  // Get the last character
 
-      /*  string hashedPin = bank.hashPinCode(newAccount.pincode, lastdigit);*/
         string filepath = "D:\\account.txt";
 
         // Open the file on the flash drive for writing

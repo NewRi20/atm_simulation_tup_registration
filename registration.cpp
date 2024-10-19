@@ -155,7 +155,6 @@ void Bank::saveAllAccounts()
 
 Account& Bank::searchAccount(string& accountNumber)
 {
-	// TODO: insert return statement here
 	Node* current = head;
 
 	while (current) {
@@ -182,7 +181,7 @@ void Bank::updateAccount(Account& updatedAccount)
 	}
 }
 
-void Bank::add(Account account)
+void Bank::add(Account account) 
 {
 	Node* newNode = new Node(account);
 	if (isEmpty())
