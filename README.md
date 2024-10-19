@@ -16,13 +16,13 @@ Simply run the project from Visual Studio
 - BSCS-2A
 
 ## Leader
-- Clifford Roy E. Torion
-In charge of creating the structure of the project, flash drive logic, and leading the team.
+#### Clifford Roy E. Torion
+- In charge of creating the structure of the project, flash drive logic, and leading the team.
 
 ## Members
-- Irwen Fronda
-In charge of the registration module
-- Marcjustine Jadaone
-In charge of the transaction module
-- Julius Inciong
-In charge of the front-end design/layout of the application
+#### Irwen Fronda
+- In charge of the registration module
+#### Marcjustine Jadaone
+- In charge of the transaction module
+#### Julius Inciong
+- In charge of the front-end design/layout of the application
